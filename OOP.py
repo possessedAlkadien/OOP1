@@ -10,9 +10,13 @@ webbrowser.register('chrome', None, webbrowser.BackgroundBrowser(chrome_path))
 class Question:
     def userQuestion(self):
         Ques = str(input("Введите запрос:"))
-        url = f"https://en.wikipedia.org/w/index.php?search={Ques}"
-        response = requests.get(url)
-        return response
+        if len(Ques)==0:
+            print ('Введена пустая строка')
+            return 'Пустая строка'
+        else:
+            url = f"https://en.wikipedia.org/w/index.php?search={Ques}"
+            response = requests.get(url)
+            return response
 
 class Result:
     def searchResults(self,response):
@@ -43,11 +47,13 @@ def main():
     userQuery = Question()
     Results = Result()
     quis = userQuery.userQuestion()
-    res = Results.searchResults(quis)
-    if res:
-        Results.outputResults(res)
-        choice = int(input("Выберите номер статьи, чтобы открыть её (0 для выхода): "))
-        Results.openBrowser(choice, res)
+    if quis != "Пустая строка":
+        res = Results.searchResults(quis)
+        if res:
+            Results.outputResults(res)
+            choice = int(input("Выберите номер статьи, чтобы открыть её (0 для выхода): "))
+            Results.openBrowser(choice, res)
 
 if __name__ == '__main__':
     main()
+
